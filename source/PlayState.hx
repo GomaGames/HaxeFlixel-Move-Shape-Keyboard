@@ -54,6 +54,9 @@ class PlayState extends FlxState
    */
   override public function destroy():Void
   {
+    // set sprites to null to help with gc
+    cross_shape = null;
+
     super.destroy();
   }
 
