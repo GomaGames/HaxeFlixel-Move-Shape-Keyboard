@@ -19,6 +19,9 @@ class PlayState extends FlxState
    */
   override public function create():Void
   {
+    // Hide the mouse
+    FlxG.mouse.visible = false;
+
     // setup and create shape
     var line_style:LineStyle = {
       color: FlxColor.CHARTREUSE,
@@ -59,6 +62,9 @@ class PlayState extends FlxState
    */
   override public function update():Void
   {
+
+
+
     super.update();
   }
 }
