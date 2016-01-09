@@ -5,6 +5,7 @@ import flixel.FlxState;
 import flixel.util.FlxColor;
 import flixel.addons.display.shapes.FlxShapeCross;
 import flixel.util.FlxSpriteUtil;
+import flixel.util.FlxMath;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -65,33 +66,35 @@ class PlayState extends FlxState
    */
   override public function update():Void
   {
+    var velocity = { x : 0.0, y : 0.0 };
+
     // Vertical Movement
     if( FlxG.keys.pressed.W || FlxG.keys.pressed.UP ){
-      moveShape(Direction.UP, Reg.MOVE_SPEED);
+      velocity.y = -Reg.MOVE_SPEED;
     } else
     if( FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN ){
-      moveShape(Direction.DOWN, Reg.MOVE_SPEED);
+      velocity.y = Reg.MOVE_SPEED;
     }
 
     // Horizontal Movement
     if( FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT ){
-      moveShape(Direction.LEFT, Reg.MOVE_SPEED);
+      velocity.x = -Reg.MOVE_SPEED;
     } else
     if( FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT ){
-      moveShape(Direction.RIGHT, Reg.MOVE_SPEED);
+      velocity.x = Reg.MOVE_SPEED;
     }
+
+    // compensate for both axes
+    if( velocity.x != 0 && velocity.y != 0){
+      velocity.x /= FlxMath.SQUARE_ROOT_OF_TWO;
+      velocity.y /= FlxMath.SQUARE_ROOT_OF_TWO;
+    }
+
+    // update the shape's position
+    cross_shape.x += velocity.x;
+    cross_shape.y += velocity.y;
 
     super.update();
   }
 
-
-  private inline function moveShape(direction:Direction, amount:Float):Void
-  {
-    switch(direction){
-      case Direction.UP: cross_shape.y -= amount;
-      case Direction.DOWN: cross_shape.y += amount;
-      case Direction.LEFT: cross_shape.x -= amount;
-      case Direction.RIGHT: cross_shape.x += amount;
-    }
-  }
 }
